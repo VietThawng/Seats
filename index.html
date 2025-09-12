@@ -1,110 +1,37 @@
-<!doctype html>
-<html lang="vi">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sơ đồ ghế sự kiện</title>
   <link rel="stylesheet" href="style.css">
-  <title>Chọn chỗ ngồi sự kiện Niên Vọng</title>
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <h1>Chọn chỗ ngồi</h1>
+   <div class="stage">SÂN KHẤU</div>
 
-  <!-- Màn hình phía trước -->
-  <div class="screen">MÀN HÌNH</div>
-
-  <!-- Ghế ngồi -->
-  <div id="seat-map" class="seats"></div>
-
-  <!-- Nút thao tác -->
-  <div class="controls">
-    <button id="confirmBtn" disabled>Xác nhận</button>
-    <button id="releaseBtn" disabled>Huỷ chọn</button>
-    <button id="resetBtn">Reset tất cả</button>
-    <div id="count">Đã chọn: 0</div>
+  <!-- Tầng 1 - khu trước -->
+  <div class="section">
+    <h2>Tầng 1 - Khu trước</h2>
+    <div id="front-section"></div>
   </div>
 
-<script>
-const ROWS = 16, COLS = 8; // số hàng và cột ghế
-let seats = [];
-let selected = new Set();
+  <!-- Tầng 1 - khu sau -->
+  <div class="section">
+    <h2>Tầng 1 - Khu sau</h2>
+    <div id="back-section"></div>
+  </div>
 
-// Khởi tạo ghế
-function initSeats(){
-  seats = [];
-  let id = 1;
-  for(let r=0;r<ROWS;r++){
-    for(let c=0;c<COLS;c++){
-      seats.push({id:id++, row:r+1, col:c+1, status:'available'});
-    }
-  }
-}
+  <!-- Tầng 2 -->
+  <div class="section">
+    <h2>Tầng 2</h2>
+    <div id="floor2-section"></div>
+  </div>
 
-// Vẽ giao diện
-function render(){
-  const mapEl = document.getElementById('seat-map');
-  mapEl.innerHTML = '';
-  seats.forEach(s=>{
-    const el = document.createElement('div');
-    el.className = 'seat ' + s.status;
-    el.textContent = s.row + '-' + s.col;
-    el.addEventListener('click',()=>onSeatClick(s.id));
-    mapEl.appendChild(el);
-  });
-  updateUI();
-}
-
-// Xử lý click
-function onSeatClick(id){
-  const s = seats.find(x=>x.id===id);
-  if(!s || s.status==='booked') return;
-
-  if(selected.has(id)){
-    selected.delete(id);
-    s.status='available';
-  } else {
-    selected.add(id);
-    s.status='selected';
-  }
-  render();
-}
-
-// Cập nhật UI
-function updateUI(){
-  document.getElementById('count').textContent = 'Đã chọn: ' + selected.size;
-  document.getElementById('confirmBtn').disabled = selected.size===0;
-  document.getElementById('releaseBtn').disabled = selected.size===0;
-}
-
-// Xác nhận
-confirmBtn.addEventListener('click',()=>{
-  selected.forEach(id=>{
-    const s = seats.find(x=>x.id===id);
-    if(s) s.status='booked';
-  });
-  selected.clear();
-  render();
-});
-
-// Huỷ chọn
-releaseBtn.addEventListener('click',()=>{
-  selected.forEach(id=>{
-    const s = seats.find(x=>x.id===id);
-    if(s) s.status='available';
-  });
-  selected.clear();
-  render();
-});
-
-// Reset tất cả
-resetBtn.addEventListener('click',()=>{
-  initSeats();
-  selected.clear();
-  render();
-});
-
-// Khởi động
-initSeats();
-render();
-</script>
+  <div class="info">
+    <h3>Danh sách ghế đã chọn:</h3>
+    <div id="selected-seats">Chưa chọn ghế nào</div>
+    <button onclick="confirmSeats()">Xác nhận</button>
+  </div>
 </body>
 </html>
