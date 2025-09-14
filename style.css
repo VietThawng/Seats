@@ -53,3 +53,17 @@ body {
       margin-top: 15px;
       cursor: pointer;
     }
+    
+    .row {
+          display: flex;
+          align-items: center;
+          margin-bottom: 8px;
+          /* khoảng cách giữa các hàng */
+        }
+    
+    .row-label {
+          width: 30px;
+          /* chừa khoảng cố định */
+          font-weight: bold;
+          text-align: center;
+        }
